@@ -15,7 +15,7 @@
 <s:fielderror/>
 <form action="user_login.action" method="post">
     <div>
-        <label>用户名11：</label>
+        <label>用户名22：</label>
         <input type="text" name="userName">
         <font color="red"><s:fielderror fieldName="userName"/></font>
     </div>
