@@ -20,7 +20,7 @@
         <font color="red"><s:fielderror fieldName="userName"/></font>
     </div>
     <div>
-        <label>密码：</label>
+        <label>密码11：</label>
         <input type="password" name="password">
         <font color="red"><s:fielderror fieldName="password"/></font>
     </div>
