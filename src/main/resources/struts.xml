@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+<!--    -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+    <constant name="struts.ui.theme" value="simple"></constant>
+
+<!--    公共通用配置-->
+    <package name="default" extends="struts-default">
+        <global-allowed-methods>regex:.*</global-allowed-methods>
+    </package>
+<!--&lt;!&ndash;    用户模块&ndash;&gt;-->
+<!--    <package name="user" extends="default" namespace="/">-->
+<!--        <action name="user" class="web.UserAction">-->
+<!--            <result>/success.jsp</result>-->
+<!--            <result name="login">/register.jsp</result>-->
+<!--        </action>-->
+<!--    </package>-->
+
+
+    <!-- 登录验证模块 -->
+    <package name="user" extends="default" namespace="/" >
+        <!-- 定义拦截器 -->
+        <interceptors>
+            <!-- 注入登录拦截器类 -->
+            <interceptor name="loginInterceptor"
+                         class="web.interceptor.SystemInterceptor"/>
+            <!-- 1.定义拦截器栈 -->
+            <interceptor-stack name="myLoginStack">
+                <!-- 2.引用默认的拦截器 -->
+                <interceptor-ref name="defaultStack"/>
+                <!-- 3.引用自定义的登录拦截器 -->
+                <interceptor-ref name="loginInterceptor">
+                    <!-- 注意：includeMethods属性的优先级高于excludeMethods属性 -->
+                    <param name="includeMethods">add*,update*</param>
+                    <!-- excludeMethods：设置不拦截的方法，多个方法名之间使用逗号隔开 -->
+                    <param name="excludeMethods">login</param>
+                    <!-- includeMethods:设置拦截的方法，多个方法名之间使用逗号隔开 -->
+                </interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        <!-- 使用通配符访问 -->
+        <action name="user_*" class="web.UserAction" method="{1}">
+            <!-- 登录成功 -->
+            <result name="success">/success.jsp</result>
+            <!-- 登录失败 -->
+            <result name="login">/login.jsp</result>
+            <!-- 4.引用拦截器 -->
+            <interceptor-ref name="myLoginStack"/>
+        </action>
+    </package>
+
+
+<!--    <package name="default" extends="struts-default" namespace="/" >-->
+<!--        &lt;!&ndash;        index.html提交的路径就是此处的name&ndash;&gt;-->
+<!--        &lt;!&ndash;        class表示action(java类)的路径&ndash;&gt;-->
+<!--        &lt;!&ndash;        method表示action中的方法名&ndash;&gt;-->
+<!--        <action name="hello" class="web.HelloAction">-->
+<!--            &lt;!&ndash;            name表示action中的返回值&ndash;&gt;-->
+<!--            &lt;!&ndash;            标签中的值表示要跳转的网页&ndash;&gt;-->
+<!--            <result name="success">/show.jsp</result>-->
+<!--        </action>-->
+<!--        <action name="login" class="web.LoginAction">-->
+<!--            <result name="success">/success.jsp</result>-->
+<!--            <result name="error">/login.jsp</result>-->
+<!--            <result name="input">/login.jsp</result>-->
+<!--        </action>-->
+<!--        <action name="findUserList" class="web.UserAction" method="findList">-->
+<!--            <result name="success">/userList.jsp</result>-->
+<!--        </action>-->
+<!--    </package>-->
+</struts>
